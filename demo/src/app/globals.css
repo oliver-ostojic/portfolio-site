@@ -25,8 +25,72 @@
     --scroll-padding-top: 0;
     scroll-padding-top: var(--scroll-padding-top);
 
+    /* Glass effect defaults - controlled by dev panel */
+    --glass-bg-opacity: 0.6;
+    --glass-border-opacity: 0.08;
+    --glass-blur: 8px;
+
     @variant dark {
       background-color: var(--color-olive-950);
     }
   }
+}
+
+/* AI Glass border effect */
+.ai-glass-border {
+  position: relative;
+  --border-color: 0, 0, 0;
+  --border-opacity: var(--glass-border-opacity);
+  --border-width: 1.5px;
+  --border-brightness: 1.3;
+  --border-fade: 30%; /* How much the corners fade - higher = more fade */
+}
+
+/* AI Glass content - uses CSS custom properties for dev panel control */
+.ai-glass-content {
+  background: rgba(255, 255, 255, var(--glass-bg-opacity));
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+}
+
+/* Luminous border - samples background color and brightens it */
+.ai-glass-border::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: var(--border-width);
+  /* Sample and brighten the background */
+  backdrop-filter: blur(2px) brightness(var(--border-brightness)) saturate(1.2);
+  -webkit-backdrop-filter: blur(2px) brightness(var(--border-brightness)) saturate(1.2);
+  /* Gradient border with corner fade - 135deg goes from top-left to bottom-right */
+  background: linear-gradient(
+    135deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.35) var(--border-fade),
+    rgba(255, 255, 255, 0.35) calc(100% - var(--border-fade)),
+    transparent 100%
+  );
+  /* Mask to only show as border */
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Optional: add subtle inner glow */
+.ai-glass-border::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.1);
+  pointer-events: none;
+  z-index: 2;
 }

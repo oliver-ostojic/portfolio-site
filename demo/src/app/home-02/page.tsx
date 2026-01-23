@@ -20,8 +20,9 @@ import { Stat, StatsWithGraph } from '@/components/sections/stats-with-graph';
 import { TestimonialLargeQuote } from '@/components/sections/testimonial-with-large-quote';
 import { LogbookWriterOverlay } from '@/components/logbook-writer-overlay';
 
-export default function Page() {
+export default function HomePage02() {
   const [showOverlay, setShowOverlay] = useState(false);
+
   return (
     <>
       {/* Hero */}
@@ -41,10 +42,6 @@ export default function Page() {
           <EmailSignupForm
             className="max-w-full"
             variant="overlay"
-            onSubmit={(e) => {
-              e.preventDefault();
-              setShowOverlay(true);
-            }}
             cta={
               <>
                 Request invite <ArrowNarrowRightIcon />

@@ -2,6 +2,7 @@ import Image from 'next/image'
 
 import { ButtonLink, PlainButtonLink } from '@/components/elements/button'
 import { Main } from '@/components/elements/main'
+import { GlassConfigProvider } from '@/components/glass-config-context'
 import { GitHubIcon } from '@/components/icons/social/github-icon'
 import { XIcon } from '@/components/icons/social/x-icon'
 import { YouTubeIcon } from '@/components/icons/social/youtube-icon'
@@ -41,7 +42,7 @@ export default function RootLayout({
         />
       </head>
       <body>
-        <>
+        <GlassConfigProvider>
           <NavbarWithLinksActionsAndCenteredLogo
             id="navbar"
             links={
@@ -139,7 +140,7 @@ export default function RootLayout({
               </>
             }
           />
-        </>
+        </GlassConfigProvider>
       </body>
     </html>
   )
