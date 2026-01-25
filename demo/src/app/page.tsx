@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 
 import { AnnouncementBadge } from '@/components/elements/announcement-badge';
@@ -22,6 +22,19 @@ import { LogbookWriterOverlay } from '@/components/logbook-writer-overlay';
 
 export default function Page() {
   const [showOverlay, setShowOverlay] = useState(false);
+
+  // Listen for close message from logbook writer iframe
+  useEffect(() => {
+    const handleMessage = (event: MessageEvent) => {
+      if (event.data?.type === 'CLOSE_LOGBOOK_OVERLAY') {
+        setShowOverlay(false);
+      }
+    };
+
+    window.addEventListener('message', handleMessage);
+    return () => window.removeEventListener('message', handleMessage);
+  }, []);
+
   return (
     <>
       {/* Hero */}
