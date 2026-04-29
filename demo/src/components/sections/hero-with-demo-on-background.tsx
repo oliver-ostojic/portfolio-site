@@ -27,7 +27,7 @@ export function HeroWithDemoOnBackground({
         <div className="-mx-2 sm:px-6 md:px-12 lg:px-0">
           <Container className="flex flex-col gap-16">
             <div className="flex gap-x-10 gap-y-16 max-lg:flex-col sm:gap-y-24">
-              <div className="flex shrink-0 flex-col items-start gap-6 pt-16 sm:pt-32 lg:basis-2xl lg:py-40">
+              <div className="flex shrink-0 flex-col items-start gap-6 pt-16 sm:pt-32 lg:basis-[600] lg:py-40">
                 {eyebrow}
                 <Heading className="max-w-5xl" color="light">
                   {headline}
@@ -36,8 +36,8 @@ export function HeroWithDemoOnBackground({
                 {cta}
               </div>
               <div className="lg:pt-24">
-                <div className="relative h-72 sm:h-92 md:h-125 lg:size-full">
-                  <div className="absolute inset-y-0 left-0 flex w-screen overflow-hidden *:h-full *:w-auto *:max-w-none max-lg:rounded-t-lg lg:rounded-tl-lg">
+                <div className="relative min-h-[1100px] sm:min-h-[660px] lg:min-h-0 lg:size-full">
+                  <div className="absolute top-0 left-0 flex w-screen overflow-visible *:w-auto *:max-w-none max-lg:rounded-t-lg lg:rounded-tl-lg">
                     {demo}
                   </div>
                 </div>
