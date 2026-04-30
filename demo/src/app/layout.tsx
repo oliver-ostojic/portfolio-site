@@ -1,5 +1,3 @@
-import Image from 'next/image'
-
 import { ButtonLink, PlainButtonLink } from '@/components/elements/button'
 import { Main } from '@/components/elements/main'
 import { GlassConfigProvider } from '@/components/glass-config-context'
@@ -22,7 +20,7 @@ import type { Metadata } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'Oatmeal Kit Demo',
+  title: 'Portfolio',
 }
 
 export default function RootLayout({
@@ -36,6 +34,7 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
         <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
         <link
           href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
           rel="stylesheet"
@@ -45,43 +44,14 @@ export default function RootLayout({
         <GlassConfigProvider>
           <NavbarWithLinksActionsAndCenteredLogo
             id="navbar"
-            links={
-              <>
-                <NavbarLink href="/pricing">Pricing</NavbarLink>
-                <NavbarLink href="/about">About</NavbarLink>
-                <NavbarLink href="#">Docs</NavbarLink>
-                <NavbarLink href="#" className="sm:hidden">
-                  Log in
-                </NavbarLink>
-              </>
-            }
-            logo={
-              <NavbarLogo href="/">
-                <Image
-                  src="/img/logos/oatmeal-instrument-color-olive-950.svg"
-                  alt="Oatmeal"
-                  className="dark:hidden"
-                  width={85}
-                  height={28}
-                />
-                <Image
-                  src="/img/logos/oatmeal-instrument-color-white.svg"
-                  alt="Oatmeal"
-                  className="not-dark:hidden"
-                  width={85}
-                  height={28}
-                />
-              </NavbarLogo>
-            }
-            actions={
-              <>
-                <PlainButtonLink href="#" className="max-sm:hidden">
-                  Log in
-                </PlainButtonLink>
-                <ButtonLink href="#">Get started</ButtonLink>
-              </>
-            }
-          />
+            links={<>
+              <NavbarLink href="/pricing">Projects</NavbarLink>
+              <NavbarLink href="/about">About Me</NavbarLink>
+              <NavbarLink href="#">Skills & Tools</NavbarLink>
+            </>}
+            logo={<NavbarLogo href="/">
+              <span className="font-display text-olive-950 dark:text-white" style={{ fontSize: '35px' }}>Oliver Ostojić</span>
+            </NavbarLogo>} actions={undefined}          />
 
           <Main>{children}</Main>
 
