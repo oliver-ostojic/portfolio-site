@@ -1,206 +1,122 @@
-import Image from 'next/image'
-
-import { ButtonLink, PlainButtonLink } from '@/components/elements/button'
-import { ChevronIcon } from '@/components/icons/chevron-icon'
-import { CallToActionSimple } from '@/components/sections/call-to-action-simple'
+import { ButtonLink } from '@/components/elements/button'
+import { Container } from '@/components/elements/container'
+import { Wallpaper } from '@/components/elements/wallpaper'
+import { CallToActionSimpleCentered } from '@/components/sections/call-to-action-simple-centered'
+import { Feature, FeaturesStackedAlternatingWithDemos } from '@/components/sections/features-stacked-alternating-with-demos'
 import { HeroLeftAlignedWithPhoto } from '@/components/sections/hero-left-aligned-with-photo'
-import { Stat, StatsWithGraph } from '@/components/sections/stats-with-graph'
-import { TeamFourColumnGrid, TeamMember } from '@/components/sections/team-four-column-grid'
-import { TestimonialTwoColumnWithLargePhoto } from '@/components/sections/testimonial-two-column-with-large-photo'
+import { Stat, StatsThreeColumnWithDescription } from '@/components/sections/stats-three-column-with-description'
 
 export default function Page() {
   return (
     <>
-      {/* Hero */}
+      {/* Intro */}
       <HeroLeftAlignedWithPhoto
         id="hero"
-        headline="Your customer success is our mission."
+        headline="Who even am I...?"
         subheadline={
-          <p>
-            We're on a mission to take the human element completely out of customer support — so your team can focus on
-            what matters most, profitability.
-          </p>
-        }
-        photo={
-          <Image
-            src="/img/photos/1.webp"
-            alt=""
-            width={1800}
-            height={945}
-            className="not-dark:bg-white/75 dark:bg-black/75"
-          />
+          <>
+            <p>
+              Hi! I&apos;m Oliver Ostojić, a recent graduate from NYU&apos;s Tandon School of Engineering.
+              My passion is turning a complex problem into an elegant, simple software solution.
+            </p>
+            <p>
+              I&apos;ve been fascinated by technology since I was a kid. My mind naturally gravitates
+              toward understanding systems, analyzing problems, and engineering solutions.
+            </p>
+          </>
         }
       />
-      {/* Stats */}
-      <StatsWithGraph
-        id="stats"
-        eyebrow="Built for scale"
-        headline="The inbox powering customer conversations everywhere."
-        subheadline={
-          <p>
-            Oatmeal helps teams deliver personal, organized, and fast customer support across the world. From small
-            startups to enterprise teams, we process millions of messages each month — using a massive network of low
-            wage workers stationed around the globe.
-          </p>
-        }
-      >
-        <Stat stat="2M+" text="Emails manually processed every week across thousands of teams." />
-        <Stat stat="99.98%" text="Uptime — because your customers never stop complaining." />
-      </StatsWithGraph>
-      {/* Testimonial */}
-      <TestimonialTwoColumnWithLargePhoto
-        id="testimonial"
-        quote={
-          <p>
-            Ever since we started using Oatmeal, our customer satisfaction scores have skyrocketed. The personal touch
-            that their human-AI hybrid support provides is unparalleled.
-          </p>
-        }
-        img={
-          <Image
-            src="/img/avatars/16-h-1000-w-1400.webp"
-            alt=""
-            className="not-dark:bg-white/75 dark:bg-black/75"
-            width={1400}
-            height={1000}
-          />
-        }
-        name="Lynn Marshall"
-        byline="Founder at Pine Labs"
-      />
-      {/* Team */}
-      <TeamFourColumnGrid
-        id="team"
-        headline="Our leadership team"
-        subheadline={
-          <p>
-            Oatmeals's leadership team combines decades of experience in private equity, where they honed their skills
-            in cost-cutting and maximizing shareholder value.
-          </p>
-        }
-      >
-        <TeamMember
-          img={
-            <Image
-              src="/img/avatars/1-h-1000-w-800.webp"
-              alt=""
-              className="not-dark:bg-white/75 dark:bg-black/75"
-              width={800}
-              height={1000}
-            />
-          }
-          name="Leslie Alexander"
-          byline="Co-Founder / CEO"
-        />
-        <TeamMember
-          img={
-            <Image
-              src="/img/avatars/2-h-1000-w-800.webp"
-              alt=""
-              className="not-dark:bg-white/75 dark:bg-black/75"
-              width={800}
-              height={1000}
-            />
-          }
-          name="Michael Foster"
-          byline="Co-Founder / CTO"
-        />
-        <TeamMember
-          img={
-            <Image
-              src="/img/avatars/7-h-1000-w-800.webp"
-              alt=""
-              className="not-dark:bg-white/75 dark:bg-black/75"
-              width={800}
-              height={1000}
-            />
-          }
-          name="Dries Vincent"
-          byline="Business Relations"
-        />
-        <TeamMember
-          img={
-            <Image
-              src="/img/avatars/4-h-1000-w-800.webp"
-              alt=""
-              className="not-dark:bg-white/75 dark:bg-black/75"
-              width={800}
-              height={1000}
-            />
-          }
-          name="Lindsay Walton"
-          byline="Front-end Developer"
-        />
-        <TeamMember
-          img={
-            <Image
-              src="/img/avatars/5-h-1000-w-800.webp"
-              alt=""
-              className="not-dark:bg-white/75 dark:bg-black/75"
-              width={800}
-              height={1000}
-            />
-          }
-          name="Noor Hasan"
-          byline="Designer"
-        />
-        <TeamMember
-          img={
-            <Image
-              src="/img/avatars/6-h-1000-w-800.webp"
-              alt=""
-              className="not-dark:bg-white/75 dark:bg-black/75"
-              width={800}
-              height={1000}
-            />
-          }
-          name="Tom Cook"
-          byline="Director of Product"
-        />
-        <TeamMember
-          img={
-            <Image
-              src="/img/avatars/8-h-1000-w-800.webp"
-              alt=""
-              className="not-dark:bg-white/75 dark:bg-black/75"
-              width={800}
-              height={1000}
-            />
-          }
-          name="Whitney Francis"
-          byline="Copywriter"
-        />
-        <TeamMember
-          img={
-            <Image
-              src="/img/avatars/3-h-1000-w-800.webp"
-              alt=""
-              className="not-dark:bg-white/75 dark:bg-black/75"
-              width={800}
-              height={1000}
-            />
-          }
-          name="Leonard Wu"
-          byline="Senior Designer"
-        />
-      </TeamFourColumnGrid>
-      {/* Call To Action */}
-      <CallToActionSimple
-        id="call-to-action"
-        headline="Have anymore questions?"
-        subheadline={
-          <p>Chat to someone on our sales team, who will make promises about our roadmap that we won't keep.</p>
-        }
-        cta={
-          <div className="flex items-center gap-4">
-            <ButtonLink href="#" size="lg">
-              Chat with us
-            </ButtonLink>
 
-            <PlainButtonLink href="#" size="lg">
-              Book a demo <ChevronIcon />
-            </PlainButtonLink>
-          </div>
+      {/* Pull quote */}
+      <section className="px-4 sm:px-6 lg:px-8">
+        <Wallpaper color="blue" className="rounded-2xl pt-24 pb-24">
+          <Container>
+            <blockquote className="mx-auto text-center font-display tracking-tight text-white text-[clamp(4rem,18vw,14rem)]/[1.05]">
+              &ldquo;Software is my art form.&rdquo;
+            </blockquote>
+          </Container>
+        </Wallpaper>
+      </section>
+
+      {/* Craft */}
+      <FeaturesStackedAlternatingWithDemos
+        id="craft"
+        eyebrow="The craft"
+        headline="How I build."
+        features={
+          <>
+            <Feature
+              headline="Architect by nature"
+              subheadline={
+                <>
+                  <p>
+                    I specialize in backend development, where my greatest strength lies in software
+                    architecture. I love taking a use case and designing the system that brings it to
+                    life — starting simple, then iteratively making it more reusable, more efficient,
+                    and cleaner.
+                  </p>
+                  <p>
+                    The software I write is modular, scalable, and intentional. That same
+                    deliberateness carries into my frontend work. Every element in an interface I
+                    build is placed with intention and purpose. My goal is a cohesive design, every interface tied together, nothing feeling out of place.
+                  </p>
+                </>
+              }
+              cta={null}
+              demo={<Wallpaper color="brown" className="h-full min-h-64" />}
+            />
+            <Feature
+              headline="Always thinking bigger"
+              subheadline={
+                <p>
+                  I&apos;m drawn to big ideas. I&apos;m always seeing where a project can go next
+                  and how far I can push it. I see a problem and my first instinct is to ask:
+                  &ldquo;how can I solve this?&rdquo; I love building software that makes people
+                  happier, and their lives easier.
+                </p>
+              }
+              cta={null}
+              demo={<Wallpaper color="purple" className="h-full min-h-64" />}
+            />
+          </>
+        }
+      />
+
+      {/* Teammate */}
+      <StatsThreeColumnWithDescription
+        id="teammate"
+        heading="As a teammate"
+        description={
+          <p>
+            I bring strong interpersonal skills alongside my technical ones. I believe the best
+            solutions come from collaboration and compromise — and the best teams are built on
+            diversity, trust, good communication, and not taking themselves too seriously.
+          </p>
+        }
+      >
+        <Stat
+          stat="Direct"
+          text="Authentic and confident in my ideas, but always open to being challenged."
+        />
+        <Stat
+          stat="Collaborative"
+          text="The best solutions come from many different perspectives, not any one person's vision."
+        />
+        <Stat
+          stat="Leader"
+          text="A natural communicator who values genuine relationships, connects with people, and gets things moving."
+        />
+      </StatsThreeColumnWithDescription>
+
+      {/* CTA */}
+      <CallToActionSimpleCentered
+        id="cta"
+        headline="I'm the engineer for you."
+        subheadline={<p>If that sounds like someone you want building with you, let&apos;s talk.</p>}
+        cta={
+          <ButtonLink href="mailto:ollieostojic@gmail.com" size="lg">
+            Get in touch
+          </ButtonLink>
         }
       />
     </>

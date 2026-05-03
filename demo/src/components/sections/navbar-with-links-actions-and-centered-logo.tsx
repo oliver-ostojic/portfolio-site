@@ -1,3 +1,5 @@
+'use client'
+
 import Link from 'next/link'
 
 import { ElDialog, ElDialogPanel } from '@tailwindplus/elements/react'
@@ -93,7 +95,12 @@ export function NavbarWithLinksActionsAndCenteredLogo({
                   </svg>
                 </button>
               </div>
-              <div className="mt-6 flex flex-col gap-6">{links}</div>
+              <div
+                className="mt-6 flex flex-col gap-6"
+                onClick={() => (document.getElementById('mobile-menu') as HTMLDialogElement | null)?.close()}
+              >
+                {links}
+              </div>
             </ElDialogPanel>
           </dialog>
         </ElDialog>

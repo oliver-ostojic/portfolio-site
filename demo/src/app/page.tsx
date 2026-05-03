@@ -1,14 +1,12 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import Image from 'next/image';
-
 import { AnnouncementBadge } from '@/components/elements/announcement-badge';
 import { ButtonLink, PlainButtonLink, SoftButtonLink } from '@/components/elements/button';
 
+import NextLink from 'next/link'
 import { Link } from '@/components/elements/link';
 import { Logo, LogoGrid } from '@/components/elements/logo-grid';
-import { Screenshot } from '@/components/elements/screenshot';
 import { ArrowNarrowRightIcon } from '@/components/icons/arrow-narrow-right-icon';
 import { ChevronIcon } from '@/components/icons/chevron-icon';
 import { CallToActionSimple } from '@/components/sections/call-to-action-simple';
@@ -21,6 +19,7 @@ import { TestimonialLargeQuote } from '@/components/sections/testimonial-with-la
 import { LogbookWriterOverlay } from '@/components/logbook-writer-overlay';
 import { TutorialChoicePopup } from '@/components/tutorial-choice-popup';
 import { LogbookPreviewCard } from '@/components/logbook-preview';
+import { Wallpaper } from '@/components/elements/wallpaper';
 
 export default function Page() {
   const [showOverlay, setShowOverlay] = useState(false);
@@ -86,162 +85,34 @@ export default function Page() {
           </p>
         }
         cta={
-          <Link href="#">
+          <Link href="/projects">
             View All <ArrowNarrowRightIcon />
           </Link>
         }
         features={
           <>
-            <FeatureThreeColumnWithDemos
-              demo={
-                <Screenshot wallpaper="blue" placement="bottom-right">
-                  <Image
-                    src="/img/screenshots/1-left-1200-top-736.webp"
-                    alt=""
-                    className="bg-white/75 sm:hidden dark:hidden"
-                    width={1200}
-                    height={736}
-                  />
-                  <Image
-                    src="/img/screenshots/1-color-olive-left-1200-top-736.webp"
-                    alt=""
-                    width={1200}
-                    height={736}
-                    className="bg-black/75 not-dark:hidden sm:hidden"
-                  />
-                  <Image
-                    src="/img/screenshots/1-left-1800-top-736.webp"
-                    alt=""
-                    className="bg-white/75 max-sm:hidden lg:hidden dark:hidden"
-                    width={1800}
-                    height={736}
-                  />
-                  <Image
-                    src="/img/screenshots/1-color-olive-left-1800-top-736.webp"
-                    alt=""
-                    width={1800}
-                    height={736}
-                    className="bg-black/75 not-dark:hidden max-sm:hidden lg:hidden"
-                  />
-                  <Image
-                    src="/img/screenshots/1-left-1200-top-736.webp"
-                    alt=""
-                    className="bg-white/75 max-lg:hidden dark:hidden"
-                    width={1200}
-                    height={736}
-                  />
-                  <Image
-                    src="/img/screenshots/1-color-olive-left-1200-top-736.webp"
-                    alt=""
-                    width={1200}
-                    height={736}
-                    className="bg-black/75 not-dark:hidden max-lg:hidden"
-                  />
-                </Screenshot>
-              }
-              headline="Shared Inbox"
-              subheadline={<p>Manage support emails together in real time — no more support email hot potato.</p>}
-            />
-            <FeatureThreeColumnWithDemos
-              demo={
-                <Screenshot wallpaper="purple" placement="top-left">
-                  <Image
-                    src="/img/screenshots/1-right-1200-bottom-736.webp"
-                    alt=""
-                    className="bg-white/75 sm:hidden dark:hidden"
-                    width={1200}
-                    height={736}
-                  />
-                  <Image
-                    src="/img/screenshots/1-color-olive-right-1200-bottom-736.webp"
-                    alt=""
-                    width={1200}
-                    height={736}
-                    className="bg-black/75 not-dark:hidden sm:hidden"
-                  />
-                  <Image
-                    src="/img/screenshots/1-right-1800-bottom-736.webp"
-                    alt=""
-                    className="bg-white/75 max-sm:hidden lg:hidden dark:hidden"
-                    width={1800}
-                    height={736}
-                  />
-                  <Image
-                    src="/img/screenshots/1-color-olive-right-1800-bottom-736.webp"
-                    alt=""
-                    width={1800}
-                    height={736}
-                    className="bg-black/75 not-dark:hidden max-sm:hidden lg:hidden"
-                  />
-                  <Image
-                    src="/img/screenshots/1-right-1200-bottom-736.webp"
-                    alt=""
-                    className="bg-white/75 max-lg:hidden dark:hidden"
-                    width={1200}
-                    height={736}
-                  />
-                  <Image
-                    src="/img/screenshots/1-color-olive-right-1200-bottom-736.webp"
-                    alt=""
-                    width={1200}
-                    height={736}
-                    className="bg-black/75 not-dark:hidden max-lg:hidden"
-                  />
-                </Screenshot>
-              }
-              headline="Collision Detection"
-              subheadline={<p>See when a teammate is replying before you hit send. Goodbye duplicate replies.</p>}
-            />
-            <FeatureThreeColumnWithDemos
-              demo={
-                <Screenshot wallpaper="brown" placement="bottom-left">
-                  <Image
-                    src="/img/screenshots/1-right-1200-top-736.webp"
-                    alt=""
-                    className="bg-white/75 sm:hidden dark:hidden"
-                    width={1200}
-                    height={736}
-                  />
-                  <Image
-                    src="/img/screenshots/1-color-olive-right-1200-top-736.webp"
-                    alt=""
-                    width={1200}
-                    height={736}
-                    className="bg-black/75 not-dark:hidden sm:hidden"
-                  />
-                  <Image
-                    src="/img/screenshots/1-right-1800-top-736.webp"
-                    alt=""
-                    className="bg-white/75 max-sm:hidden lg:hidden dark:hidden"
-                    width={1800}
-                    height={736}
-                  />
-                  <Image
-                    src="/img/screenshots/1-color-olive-right-1800-top-736.webp"
-                    alt=""
-                    width={1800}
-                    height={736}
-                    className="bg-black/75 not-dark:hidden max-sm:hidden lg:hidden"
-                  />
-                  <Image
-                    src="/img/screenshots/1-right-1200-top-736.webp"
-                    alt=""
-                    className="bg-white/75 max-lg:hidden dark:hidden"
-                    width={1200}
-                    height={736}
-                  />
-                  <Image
-                    src="/img/screenshots/1-color-olive-right-1200-top-736.webp"
-                    alt=""
-                    width={1200}
-                    height={736}
-                    className="bg-black/75 not-dark:hidden max-lg:hidden"
-                  />
-                </Screenshot>
-              }
-              headline="Inbox Agent"
-              subheadline={<p>Get valuable context without having to read through your customer's angry emails.</p>}
-            />
+            <NextLink href="/projects?project=find-doc" className="block">
+              <FeatureThreeColumnWithDemos
+                demo={<Wallpaper color="blue" className="h-16" />}
+                headline="Find Doc"
+                subheadline={<p>A doctor-finder that matches you by location, insurance, and specialty. Book in seconds.</p>}
+              />
+            </NextLink>
+            <NextLink href="/projects?project=fitness-trainer" className="block">
+              <FeatureThreeColumnWithDemos
+                reverse
+                demo={<Wallpaper color="purple" className="h-16" />}
+                headline="Fitness Trainer"
+                subheadline={<p>A workout tracker that logs your lifts, analyzes your progress, and recommends what to do next.</p>}
+              />
+            </NextLink>
+            <NextLink href="/projects?project=animal-match" className="block">
+              <FeatureThreeColumnWithDemos
+                demo={<Wallpaper color="brown" className="h-16" />}
+                headline="Animal Match"
+                subheadline={<p>A personality quiz that matches you to an animal based on your lifestyle, diet, and location.</p>}
+              />
+            </NextLink>
           </>
         }
       />

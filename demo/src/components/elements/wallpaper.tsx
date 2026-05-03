@@ -42,7 +42,7 @@ export function Wallpaper({
           backgroundImage: noisePattern,
         }}
       />
-      <div className="relative">{children}</div>
+      <div className="relative w-full">{children}</div>
     </div>
   )
 }

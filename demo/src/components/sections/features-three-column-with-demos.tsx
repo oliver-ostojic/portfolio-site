@@ -6,15 +6,17 @@ export function FeatureThreeColumnWithDemos({
   demo,
   headline,
   subheadline,
+  reverse = false,
   className,
   ...props
 }: {
   demo: ReactNode
   headline: ReactNode
   subheadline: ReactNode
+  reverse?: boolean
 } & ComponentProps<'div'>) {
   return (
-    <div className={clsx('rounded-lg bg-olive-950/2.5 p-2 dark:bg-white/5', className)} {...props}>
+    <div className={clsx('flex rounded-lg bg-olive-950/2.5 p-2 dark:bg-white/5', reverse ? 'flex-col-reverse' : 'flex-col', className)} {...props}>
       <div className="relative overflow-hidden rounded-sm dark:after:absolute dark:after:inset-0 dark:after:rounded-sm dark:after:outline-1 dark:after:-outline-offset-1 dark:after:outline-white/10">
         {demo}
       </div>

@@ -19,7 +19,7 @@ demo/
 │   │   ├── layout.tsx      # Root layout with navbar & footer
 │   │   ├── page.tsx        # Home page
 │   │   ├── about/page.tsx
-│   │   ├── pricing/page.tsx
+│   │   ├── projects/page.tsx
 │   │   └── globals.css     # Tailwind config & theme
 │   └── components/
 │       ├── elements/       # Basic UI components

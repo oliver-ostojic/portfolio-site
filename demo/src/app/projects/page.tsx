@@ -1,9 +1,9 @@
 'use client'
 
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { clsx } from 'clsx/lite'
-import { ButtonLink, PlainButtonLink, SoftButtonLink } from '@/components/elements/button'
+import { ButtonLink, PlainButtonLink } from '@/components/elements/button'
 import { Container } from '@/components/elements/container'
 import { Eyebrow } from '@/components/elements/eyebrow'
 import { Heading } from '@/components/elements/heading'
@@ -12,6 +12,10 @@ import { Wallpaper } from '@/components/elements/wallpaper'
 import { ChevronIcon } from '@/components/icons/chevron-icon'
 import { CheckmarkIcon } from '@/components/icons/checkmark-icon'
 import { CallToActionSimpleCentered } from '@/components/sections/call-to-action-simple-centered'
+import { LogbookWriterOverlay } from '@/components/logbook-writer-overlay'
+import { LogbookArchitectureDiagram } from '@/components/logbook-architecture-diagram'
+import { LogbookTimeline } from '@/components/logbook-timeline'
+import { TutorialChoicePopup } from '@/components/tutorial-choice-popup'
 
 type UseCase = {
   id: string
@@ -78,7 +82,8 @@ const PROJECTS: Project[] = [
         headline: 'The Architecture',
         body: [
           'The system is a Turborepo monorepo with three distinct services that each do one job well. The Next.js frontend handles all crew and schedule management UI. The Fastify API owns the data layer — crew profiles, availability windows, and published schedules stored in PostgreSQL.',
-          'The Python solver runs as a separate microservice and communicates with the API over HTTP. Keeping it isolated means it can be swapped, upgraded, or scaled independently. The API never touches the solver logic; it just hands off a problem payload and waits for a solution.',
+          'The Python solver runs as a separate microservice and communicates with the API over stdin/stdout. Keeping it isolated means it can be swapped, upgraded, or scaled independently. The API never touches the solver logic; it just hands off a JSON payload and waits for a solution.',
+          'Once the solver returns, the Logbook Manager takes over. It persists the full assignment set to PostgreSQL, then updates the fairness history — recording how many minutes each crew member was assigned to each tracked role. That history feeds directly into the next solve: the solver reads it, computes a Gini coefficient per role, and boosts the objective weight for crew who have been underrepresented over the lookback window.',
         ],
         diagramColor: 'blue',
         diagramLabel: 'System architecture diagram',
@@ -158,7 +163,7 @@ const PROJECTS: Project[] = [
     id: 'fitness-trainer',
     name: 'Fitness Trainer',
     type: 'iOS App Prototype',
-    year: '2023',
+    year: '2024',
     color: 'purple',
     oneliner: 'An iOS workout app prototype grounded in sports science — personalized training loads calculated from your actual strength.',
     overview:
@@ -344,61 +349,168 @@ function ProjectCard({
 function ProjectDetail({
   project,
   onClose,
+  onOpenDemo,
 }: {
   project: Project
   onClose: () => void
+  onOpenDemo: () => void
 }) {
   return (
     <section className="border-t border-olive-950/10 py-16 dark:border-white/10">
       <Container className="flex flex-col gap-16">
-        {/* Header */}
-        <div className="flex flex-col gap-8">
-          <div className="flex flex-wrap items-start justify-between gap-6">
-            <div className="flex flex-col gap-3">
-              <Eyebrow>{project.type} · {project.year}</Eyebrow>
-              <h2 className="font-display text-4xl tracking-tight text-olive-950 dark:text-white">
-                {project.name}
-              </h2>
-            </div>
-            <button
-              type="button"
-              onClick={onClose}
-              className="rounded-full bg-olive-950/5 px-4 py-2 text-sm/7 font-medium text-olive-700 hover:bg-olive-950/10 dark:bg-white/5 dark:text-olive-400 dark:hover:bg-white/10"
-            >
-              Close ↑
-            </button>
-          </div>
 
-          <Text className="max-w-3xl text-pretty text-base/7">{project.overview}</Text>
+        {/* Logbook Writer: two-column layout starting from the title */}
+        {project.id === 'logbook-writer' && (() => {
+          const [problem, architecture, solver] = project.sections
+          return (
+            <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-[11fr_9fr]">
+              {/* Left: header + sections + diagram + buttons */}
+              <div className="flex flex-col gap-8">
+                {/* Header */}
+                <div className="flex flex-col gap-8">
+                  <div className="flex flex-wrap items-start justify-between gap-6">
+                    <div className="flex flex-col gap-3">
+                      <Eyebrow>{project.type} · {project.year}</Eyebrow>
+                      <h2 className="font-display text-4xl tracking-tight text-olive-950 dark:text-white">
+                        {project.name}
+                      </h2>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={onClose}
+                      className="rounded-full bg-olive-950/5 px-4 py-2 text-sm/7 font-medium text-olive-700 hover:bg-olive-950/10 dark:bg-white/5 dark:text-olive-400 dark:hover:bg-white/10"
+                    >
+                      Close ↑
+                    </button>
+                  </div>
 
-          <div className="flex flex-wrap items-center gap-3">
-            <div className="flex flex-wrap gap-2">
-              {project.tech.map((t) => (
-                <TechChip key={t} label={t} />
-              ))}
+                  <Text className="max-w-3xl text-pretty text-base/7">{project.overview}</Text>
+
+                  <div className="flex flex-wrap items-center gap-3">
+                    <div className="flex flex-wrap gap-2">
+                      {project.tech.map((t) => (
+                        <TechChip key={t} label={t} />
+                      ))}
+                    </div>
+                    {project.link && (
+                      <a
+                        href={project.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 rounded-full bg-olive-950/5 px-4 py-1 text-sm/7 font-medium text-olive-700 hover:bg-olive-950/10 dark:bg-white/5 dark:text-olive-400 dark:hover:bg-white/10"
+                      >
+                        <svg viewBox="0 0 16 16" className="h-4 w-4 fill-current" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+                        View on GitHub
+                      </a>
+                    )}
+                  </div>
+
+                  <ul className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
+                    {project.highlights.map((h) => (
+                      <li key={h} className="flex items-start gap-3 text-sm/6 text-olive-700 dark:text-olive-400">
+                        <CheckmarkIcon className="mt-0.5 h-4 w-4 shrink-0 stroke-olive-950 dark:stroke-white" />
+                        {h}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                {/* Section cards */}
+                <div className="flex flex-col gap-4">
+                  <div className="flex flex-col gap-4 rounded-xl bg-olive-950/5 p-6 dark:bg-white/5">
+                    <h3 className="text-2xl/8 tracking-tight text-olive-950 dark:text-white">{problem.headline}</h3>
+                    <div className="flex flex-col gap-4 text-sm/7 text-olive-700 dark:text-olive-400">
+                      {problem.body.map((p, j) => <p key={j}>{p}</p>)}
+                    </div>
+                  </div>
+                  <div className="flex flex-col gap-4 rounded-xl bg-olive-950/5 p-6 dark:bg-white/5">
+                    <h3 className="text-2xl/8 tracking-tight text-olive-950 dark:text-white">{solver.headline}</h3>
+                    <div className="flex flex-col gap-4 text-sm/7 text-olive-700 dark:text-olive-400">
+                      {solver.body.map((p, j) => <p key={j}>{p}</p>)}
+                    </div>
+                  </div>
+                  <div className="flex flex-col gap-4 rounded-xl bg-olive-950/5 p-6 dark:bg-white/5">
+                    <h3 className="text-2xl/8 tracking-tight text-olive-950 dark:text-white">{architecture.headline}</h3>
+                    <div className="flex flex-col gap-4 text-sm/7 text-olive-700 dark:text-olive-400">
+                      {architecture.body.map((p, j) => <p key={j}>{p}</p>)}
+                    </div>
+                  </div>
+                  <img src="/img/logbook-writer-arch-diagram.png" alt={architecture.diagramLabel} className="block w-full rounded-xl object-contain" />
+                </div>
+
+                {/* Buttons */}
+                <div className="flex gap-4">
+                  <button
+                    type="button"
+                    onClick={onOpenDemo}
+                    className="inline-flex items-center justify-center rounded-full bg-olive-950/5 px-5 py-2.5 text-sm/7 font-medium text-olive-700 hover:bg-olive-950/10 dark:bg-white/5 dark:text-olive-400 dark:hover:bg-white/10"
+                  >
+                    Open live demo
+                  </button>
+                  <PlainButtonLink href="https://github.com/oliverosto" size="lg">
+                    View on GitHub <ChevronIcon />
+                  </PlainButtonLink>
+                </div>
+              </div>
+
+              {/* Right: timeline, sticky so it tracks alongside all the left-column content */}
+              <Wallpaper color="purple" className="rounded-xl p-6 sticky top-8">
+                <LogbookTimeline />
+              </Wallpaper>
             </div>
-            {project.link && (
-              <a
-                href={project.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 rounded-full bg-olive-950/5 px-4 py-1 text-sm/7 font-medium text-olive-700 hover:bg-olive-950/10 dark:bg-white/5 dark:text-olive-400 dark:hover:bg-white/10"
+          )
+        })()}
+
+        {/* Generic header — all projects except logbook-writer */}
+        {project.id !== 'logbook-writer' && (
+          <div className="flex flex-col gap-8">
+            <div className="flex flex-wrap items-start justify-between gap-6">
+              <div className="flex flex-col gap-3">
+                <Eyebrow>{project.type} · {project.year}</Eyebrow>
+                <h2 className="font-display text-4xl tracking-tight text-olive-950 dark:text-white">
+                  {project.name}
+                </h2>
+              </div>
+              <button
+                type="button"
+                onClick={onClose}
+                className="rounded-full bg-olive-950/5 px-4 py-2 text-sm/7 font-medium text-olive-700 hover:bg-olive-950/10 dark:bg-white/5 dark:text-olive-400 dark:hover:bg-white/10"
               >
-                <svg viewBox="0 0 16 16" className="h-4 w-4 fill-current" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
-                View on GitHub
-              </a>
-            )}
-          </div>
+                Close ↑
+              </button>
+            </div>
 
-          <ul className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
-            {project.highlights.map((h) => (
-              <li key={h} className="flex items-start gap-3 text-sm/6 text-olive-700 dark:text-olive-400">
-                <CheckmarkIcon className="mt-0.5 h-4 w-4 shrink-0 stroke-olive-950 dark:stroke-white" />
-                {h}
-              </li>
-            ))}
-          </ul>
-        </div>
+            <Text className="max-w-3xl text-pretty text-base/7">{project.overview}</Text>
+
+            <div className="flex flex-wrap items-center gap-3">
+              <div className="flex flex-wrap gap-2">
+                {project.tech.map((t) => (
+                  <TechChip key={t} label={t} />
+                ))}
+              </div>
+              {project.link && (
+                <a
+                  href={project.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 rounded-full bg-olive-950/5 px-4 py-1 text-sm/7 font-medium text-olive-700 hover:bg-olive-950/10 dark:bg-white/5 dark:text-olive-400 dark:hover:bg-white/10"
+                >
+                  <svg viewBox="0 0 16 16" className="h-4 w-4 fill-current" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+                  View on GitHub
+                </a>
+              )}
+            </div>
+
+            <ul className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
+              {project.highlights.map((h) => (
+                <li key={h} className="flex items-start gap-3 text-sm/6 text-olive-700 dark:text-olive-400">
+                  <CheckmarkIcon className="mt-0.5 h-4 w-4 shrink-0 stroke-olive-950 dark:stroke-white" />
+                  {h}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
 
         {/* Fitness Trainer custom layout */}
         {project.id === 'fitness-trainer' && (() => {
@@ -478,7 +590,7 @@ function ProjectDetail({
         })()}
 
         {/* Alternating sections */}
-        {project.id !== 'fitness-trainer' && project.id !== 'animal-match' && project.sections.map((section, i) => (
+        {project.id !== 'fitness-trainer' && project.id !== 'animal-match' && project.id !== 'logbook-writer' && project.sections.map((section, i) => (
           <div
             key={section.headline}
             className="grid grid-cols-1 items-center gap-8 lg:grid-cols-2"
@@ -536,17 +648,6 @@ function ProjectDetail({
             )}
           </div>
         ))}
-
-        {project.id === 'logbook-writer' && (
-          <div className="flex gap-4">
-            <SoftButtonLink href="#" size="lg">
-              Open live demo
-            </SoftButtonLink>
-            <PlainButtonLink href="https://github.com/oliverosto" size="lg">
-              View on GitHub <ChevronIcon />
-            </PlainButtonLink>
-          </div>
-        )}
       </Container>
     </section>
   )
@@ -558,6 +659,19 @@ export default function Page() {
     searchParams.get('project') ?? 'logbook-writer',
   )
   const detailRef = useRef<HTMLDivElement>(null)
+  const [showOverlay, setShowOverlay] = useState(false)
+  const [showTutorialChoice, setShowTutorialChoice] = useState(false)
+  const [overlayRoute, setOverlayRoute] = useState<'tutorial' | 'login'>('login')
+
+  useEffect(() => {
+    const handleMessage = (event: MessageEvent) => {
+      if (event.data?.type === 'CLOSE_LOGBOOK_OVERLAY') {
+        setShowOverlay(false)
+      }
+    }
+    window.addEventListener('message', handleMessage)
+    return () => window.removeEventListener('message', handleMessage)
+  }, [])
 
   function selectProject(id: string) {
     if (activeId === id) {
@@ -603,9 +717,28 @@ export default function Page() {
           <ProjectDetail
             project={activeProject}
             onClose={() => setActiveId(null)}
+            onOpenDemo={() => setShowTutorialChoice(true)}
           />
         )}
       </div>
+
+      {showTutorialChoice && (
+        <TutorialChoicePopup
+          onViewTutorial={() => {
+            setOverlayRoute('tutorial')
+            setShowTutorialChoice(false)
+            setShowOverlay(true)
+          }}
+          onSkipToSignIn={() => {
+            setOverlayRoute('login')
+            setShowTutorialChoice(false)
+            setShowOverlay(true)
+          }}
+          onClose={() => setShowTutorialChoice(false)}
+        />
+      )}
+
+      {showOverlay && <LogbookWriterOverlay onClose={() => setShowOverlay(false)} initialRoute={overlayRoute} />}
 
       <CallToActionSimpleCentered
         id="cta"
