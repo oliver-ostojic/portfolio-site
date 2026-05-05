@@ -35,7 +35,7 @@ export function LogbookWriterOverlay({ onClose, initialRoute = 'login' }: Logboo
 
       {/* iframe with logbook-writer app */}
       <iframe
-        src={`http://localhost:4001/${initialRoute}`}
+        src={`${process.env.NEXT_PUBLIC_LOGBOOK_URL}/${initialRoute}`}
         className="absolute w-full border-none z-[100]"
         style={{
           backgroundColor: 'transparent',
