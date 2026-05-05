@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { clsx } from 'clsx/lite'
 import { ButtonLink, PlainButtonLink } from '@/components/elements/button'
@@ -653,7 +653,7 @@ function ProjectDetail({
   )
 }
 
-export default function Page() {
+function ProjectsContent() {
   const searchParams = useSearchParams()
   const [activeId, setActiveId] = useState<string | null>(
     searchParams.get('project') ?? 'logbook-writer',
@@ -756,5 +756,13 @@ export default function Page() {
         }
       />
     </>
+  )
+}
+
+export default function Page() {
+  return (
+    <Suspense>
+      <ProjectsContent />
+    </Suspense>
   )
 }
