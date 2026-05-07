@@ -12,7 +12,7 @@ const PHASES: TimelinePhase[] = [
     phase: 0,
     title: 'Requirements Engineering',
     dates: 'Oct 2025',
-    summary: 'Interviewed Trader Joe\'s managers to understand scheduling pain points and processes,then produced formal requirements documentation. Conducted interviews among retail crew to understand schedule preferences.',
+    summary: 'Interviewed Trader Joe\'s managers to understand scheduling pain points and processes, then produced formal requirements documentation. Conducted interviews among retail crew to understand schedule preferences.',
   },
   {
     phase: 1,
