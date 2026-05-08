@@ -242,7 +242,7 @@ const PROJECTS: Project[] = [
         headline: 'The Architecture',
         body: [
           'The app follows a client-server split. The frontend is plain HTML and CSS — no framework, no build step. The backend is Python, organized into a Quiz-service that owns the matching logic and an API request handler that connects the two sides.',
-          'Building without a framework meant I had to understand what frameworks actually do. Routing, parsing request data, sending responses — I wired each of those up manually, which made the abstractions in every framework I\'ve used since feel far less magical.',
+          'Building without a framework meant I had to understand what frameworks actually do: routing, parsing request data, sending responses — each wired up manually.',
         ],
         diagramColor: 'green',
         diagramLabel: 'Client-server architecture',
