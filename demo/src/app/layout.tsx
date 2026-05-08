@@ -1,3 +1,4 @@
+import { Analytics } from '@vercel/analytics/next'
 import { Main } from '@/components/elements/main'
 import { GlassConfigProvider } from '@/components/glass-config-context'
 import {
@@ -44,6 +45,7 @@ export default function RootLayout({
             </NavbarLogo>} actions={undefined}          />
 
           <Main>{children}</Main>
+          <Analytics />
 
           <footer id="footer" className="py-24 bg-olive-950/2.5 dark:bg-white/5">
             <nav className="grid grid-cols-3 text-center text-sm/7 text-olive-700 dark:text-olive-400">
