@@ -5,9 +5,13 @@ import React from 'react';
 interface LogbookWriterOverlayProps {
   onClose: () => void;
   initialRoute?: 'tutorial' | 'login';
+  iframePath?: string | null;
 }
 
-export function LogbookWriterOverlay({ onClose, initialRoute = 'login' }: LogbookWriterOverlayProps) {
+export function LogbookWriterOverlay({ onClose, initialRoute = 'login', iframePath }: LogbookWriterOverlayProps) {
+  const base = process.env.NEXT_PUBLIC_LOGBOOK_URL ?? '';
+  const src = iframePath ? `${base}${iframePath}` : `${base}/${initialRoute}`;
+
   return (
     <div className="fixed inset-0 z-[100]">
 
@@ -35,7 +39,7 @@ export function LogbookWriterOverlay({ onClose, initialRoute = 'login' }: Logboo
 
       {/* iframe with logbook-writer app */}
       <iframe
-        src={`${process.env.NEXT_PUBLIC_LOGBOOK_URL}/${initialRoute}`}
+        src={src}
         className="absolute w-full border-none z-[100]"
         style={{
           backgroundColor: 'transparent',

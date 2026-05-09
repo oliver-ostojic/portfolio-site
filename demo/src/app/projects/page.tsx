@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState, Suspense } from 'react'
-import { useSearchParams } from 'next/navigation'
+import { useSearchParams, useRouter } from 'next/navigation'
 import { clsx } from 'clsx/lite'
 import { ButtonLink, PlainButtonLink } from '@/components/elements/button'
 import { Container } from '@/components/elements/container'
@@ -655,18 +655,47 @@ function ProjectDetail({
 
 function ProjectsContent() {
   const searchParams = useSearchParams()
+  const router = useRouter()
+  const isMount = useRef(true)
   const [activeId, setActiveId] = useState<string | null>(
     searchParams.get('project') ?? 'logbook-writer',
   )
   const detailRef = useRef<HTMLDivElement>(null)
-  const [showOverlay, setShowOverlay] = useState(false)
+  const [showOverlay, setShowOverlay] = useState(
+    searchParams.get('overlay') === 'true',
+  )
   const [showTutorialChoice, setShowTutorialChoice] = useState(false)
-  const [overlayRoute, setOverlayRoute] = useState<'tutorial' | 'login'>('login')
+  const [overlayRoute, setOverlayRoute] = useState<'tutorial' | 'login'>(
+    (searchParams.get('route') as 'tutorial' | 'login') ?? 'login',
+  )
+  const [iframePath, setIframePath] = useState<string | null>(
+    searchParams.get('iframePath'),
+  )
+
+  // Sync overlay state → URL params (skip initial mount to avoid redundant navigation)
+  useEffect(() => {
+    if (isMount.current) { isMount.current = false; return }
+    const params = new URLSearchParams(window.location.search)
+    if (showOverlay) {
+      params.set('overlay', 'true')
+      params.set('route', overlayRoute)
+      if (iframePath) params.set('iframePath', iframePath)
+      else params.delete('iframePath')
+    } else {
+      params.delete('overlay')
+      params.delete('route')
+      params.delete('iframePath')
+    }
+    router.replace(`?${params.toString()}`, { scroll: false })
+  }, [showOverlay, overlayRoute, iframePath])
 
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
       if (event.data?.type === 'CLOSE_LOGBOOK_OVERLAY') {
         setShowOverlay(false)
+        setIframePath(null)
+      } else if (event.data?.type === 'LOGBOOK_ROUTE_CHANGE') {
+        setIframePath(event.data.route as string)
       }
     }
     window.addEventListener('message', handleMessage)
@@ -738,7 +767,13 @@ function ProjectsContent() {
         />
       )}
 
-      {showOverlay && <LogbookWriterOverlay onClose={() => setShowOverlay(false)} initialRoute={overlayRoute} />}
+      {showOverlay && (
+        <LogbookWriterOverlay
+          onClose={() => { setShowOverlay(false); setIframePath(null) }}
+          initialRoute={overlayRoute}
+          iframePath={iframePath}
+        />
+      )}
 
       <CallToActionSimpleCentered
         id="cta"
