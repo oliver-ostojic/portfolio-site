@@ -20,6 +20,9 @@
       "clsx"
     ]
   },
+  "pnpm": {
+    "onlyBuiltDependencies": ["sharp", "unrs-resolver"]
+  },
   "dependencies": {
     "@tailwindplus/elements": "0.0.0-insiders.98ea4bc",
     "@vercel/analytics": "^2.0.1",
