@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useRef } from 'react';
 
 interface LogbookWriterOverlayProps {
   onClose: () => void;
@@ -10,7 +10,9 @@ interface LogbookWriterOverlayProps {
 
 export function LogbookWriterOverlay({ onClose, initialRoute = 'login', iframePath }: LogbookWriterOverlayProps) {
   const base = process.env.NEXT_PUBLIC_LOGBOOK_URL ?? '';
-  const src = iframePath ? `${base}${iframePath}` : `${base}/${initialRoute}`;
+  // Compute src once on mount — iframePath changes as the user navigates (for URL persistence)
+  // but must NOT re-drive the iframe src or it reloads on every route change.
+  const src = useRef(iframePath ? `${base}${iframePath}` : `${base}/${initialRoute}`);
 
   return (
     <div className="fixed inset-0 z-[100]">
@@ -39,7 +41,7 @@ export function LogbookWriterOverlay({ onClose, initialRoute = 'login', iframePa
 
       {/* iframe with logbook-writer app */}
       <iframe
-        src={src}
+        src={src.current}
         className="absolute w-full border-none z-[100]"
         style={{
           backgroundColor: 'transparent',
